@@ -1,32 +1,40 @@
 import { View, Text, StyleSheet, TouchableOpacity, Animated, Image, Dimensions } from 'react-native';
 import { theme } from '../theme';
 import ScrollView = Animated.ScrollView;
-import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../navigation/AppNavigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type Props = {
   title: string;
   data: number[];
+  hideSeeAllButton?: boolean;
 }
+
+type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
 
 const { width, height } = Dimensions.get('window');
 
-export function MoviesList({ title, data }: Props) {
-  const navigation: NavigationProp<ParamListBase> = useNavigation();
+export function MoviesList({ title, data, hideSeeAllButton }: Props) {
+  const navigation = useNavigation<MovieScreenNavigationProp>();
 
   const movieName = 'Ant-Man and the Wasp: Quantumania';
   const formatedMovieName = movieName.length > 14 ? movieName.slice(0, 14) + '...' : movieName;
 
   const handleClick = () => {
-    navigation.navigate('Movie', { item: 1 });
+    navigation.push('Movie', { item: 1 });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{title}</Text>
-        <TouchableOpacity>
-          <Text style={styles.text}>See All</Text>
-        </TouchableOpacity>
+        {!hideSeeAllButton && (
+          <TouchableOpacity>
+            <Text style={styles.text}>See All</Text>
+          </TouchableOpacity>
+        )}
+
       </View>
 
       <ScrollView

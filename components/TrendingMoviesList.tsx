@@ -12,8 +12,8 @@ const { width } = Dimensions.get('window');
 export function TrendingMoviesList({ movies }: Props) {
   const navigation: NavigationProp<ParamListBase> = useNavigation();
 
-  const handleClick = () => {
-    navigation.navigate('Movie', { item: 1 });
+  const handleClick = (item: number) => () => {
+    navigation.navigate('Movie', { item });
   };
 
   return (
@@ -21,7 +21,7 @@ export function TrendingMoviesList({ movies }: Props) {
       <Text style={styles.text}>TrendingMovies</Text>
       <Carousel
         data={movies}
-        renderItem={({ item }) => <MovieCard item={item} handleClick={handleClick}/>}
+        renderItem={({ item }) => <MovieCard item={item} handleClick={handleClick(item)}/>}
         firstItem={1}
         inactiveSlideOpacity={0.60}
         sliderWidth={width}
