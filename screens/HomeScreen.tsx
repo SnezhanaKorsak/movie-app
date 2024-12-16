@@ -3,16 +3,58 @@ import { theme } from '../theme';
 import { Bars3CenterLeftIcon } from 'react-native-heroicons/outline';
 import ScrollView = Animated.ScrollView;
 import { TrendingMoviesList } from '../components/TrendingMoviesList';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MoviesList } from '../components/MovieList';
 import { SearchButton } from '../components/SearchButton';
 import { Loading } from '../components/Loading';
+import { fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../api/movies';
+import { GetMovieResponse, Movie } from '../types';
+import { sortedByRating } from '../utils';
 
 export default function HomeScreen() {
-  const [trendingMovies] = useState([1, 2, 3]);
-  const [upcomingMovies] = useState([1, 2, 3]);
-  const [topRatedMovies] = useState([1, 2, 3]);
-  const [loading] = useState(false);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
+  const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
+  }, []);
+
+  const getTrendingMovies = async () => {
+    const data: GetMovieResponse = await fetchTrendingMovies();
+
+    if (data) {
+      const sortedList = sortedByRating(data.docs);
+
+      setTrendingMovies(sortedList);
+      setLoading(false);
+    }
+  };
+
+  const getUpcomingMovies = async () => {
+    const data: GetMovieResponse = await fetchUpcomingMovies();
+
+    if (data) {
+      const moviesWithPoster = data.docs.filter(item => item.poster);
+
+      setUpcomingMovies(moviesWithPoster);
+      setLoading(false);
+    }
+  };
+
+  const getTopRatedMovies = async () => {
+    const data: GetMovieResponse = await fetchTopRatedMovies();
+
+    if (data) {
+      const sortedList = sortedByRating(data.docs);
+
+      setTopRatedMovies(sortedList);
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -36,10 +78,11 @@ export default function HomeScreen() {
             contentContainerStyle={styles.scrollContainer}
           >
             {/* trending movies carousel*/}
-            <TrendingMoviesList movies={trendingMovies} />
+            {trendingMovies.length > 0 && <TrendingMoviesList movies={trendingMovies} />}
 
             {/* upcoming movies row*/}
-            <MoviesList title="Upcoming" data={upcomingMovies} />
+            {upcomingMovies.length > 0 && <MoviesList title="Upcoming" data={upcomingMovies} />}
+
 
             {/* top-rated movies row*/}
             <MoviesList title="Top Rated" data={topRatedMovies} />

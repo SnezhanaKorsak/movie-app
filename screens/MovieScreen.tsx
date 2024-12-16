@@ -6,7 +6,7 @@ import { RouteProp } from '@react-navigation/native';
 
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { Cast } from '../components/Cast';
-import { MoviesList } from '../components/MovieList';
+//import { MoviesList } from '../components/MovieList';
 import { BackButton } from '../components/BackButton';
 import { FavouriteButton } from '../components/FavouriteButton';
 import { MovieDetails } from '../components/MovieDetails';
@@ -21,7 +21,7 @@ export default function MovieScreen() {
   const route = useRoute<MovieScreenRouteProp>();
 
   const [cast] = useState([1, 2, 3, 4, 5]);
-  const [similarMovies] = useState([1, 2, 3, 4, 5]);
+  // const [similarMovies] = useState([1, 2, 3, 4, 5]);
   const [loading] = useState(false);
 
   const { item } = route.params;
@@ -55,7 +55,7 @@ export default function MovieScreen() {
           <Cast cast={cast} />
 
           {/*similar movies */}
-          <MoviesList title="Similar Movies" data={similarMovies} hideSeeAllButton />
+          {/* <MoviesList title="Similar Movies" data={similarMovies} hideSeeAllButton />*/}
         </Fragment>
       )}
     </ScrollView>

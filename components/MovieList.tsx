@@ -4,10 +4,12 @@ import ScrollView = Animated.ScrollView;
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Movie } from '../types';
+import { formatMovieName } from '../utils';
 
 type Props = {
   title: string;
-  data: number[];
+  data: Movie[];
   hideSeeAllButton?: boolean;
 }
 
@@ -17,9 +19,6 @@ const { width, height } = Dimensions.get('window');
 
 export function MoviesList({ title, data, hideSeeAllButton }: Props) {
   const navigation = useNavigation<MovieScreenNavigationProp>();
-
-  const movieName = 'Ant-Man and the Wasp: Quantumania';
-  const formatedMovieName = movieName.length > 14 ? movieName.slice(0, 14) + '...' : movieName;
 
   const handleClick = () => {
     navigation.push('Movie', { item: 1 });
@@ -41,19 +40,23 @@ export function MoviesList({ title, data, hideSeeAllButton }: Props) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-        {data.map((movie, index) => {
+        {data.map(({ id, enName, name, alternativeName, poster }) => {
+          const movieName = enName || name || alternativeName;
+          const source = poster ? { uri: poster.url } : require('../assets/no_image.jpg');
+
           return (
-            <TouchableOpacity key={index} onPress={handleClick}>
+            <TouchableOpacity key={id} onPress={handleClick}>
               <View style={styles.movieListContainer}>
                 <Image
-                  source={require('../assets/moviePoster2.jpg')}
+                  source={source}
                   style={{
                     width: width * 0.33,
                     height: height * 0.22,
                     borderRadius: 25,
                   }}
                 />
-                <Text style={styles.movieName}>{formatedMovieName}</Text>
+
+                {movieName && <Text style={styles.movieName}>{formatMovieName(movieName, 14)}</Text>}
               </View>
             </TouchableOpacity>
           );

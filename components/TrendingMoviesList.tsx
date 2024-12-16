@@ -1,16 +1,23 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import { theme } from '../theme';
+import { useNavigation } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel-v4';
+
 import { MovieCard } from './MovieCard';
-import { useNavigation, ParamListBase, NavigationProp } from '@react-navigation/native';
+
+import { theme } from '../theme';
+import { Movie } from '../types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigation';
 
 type Props = {
-  movies: number[];
+  movies: Movie[];
 }
 const { width } = Dimensions.get('window');
 
+type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
+
 export function TrendingMoviesList({ movies }: Props) {
-  const navigation: NavigationProp<ParamListBase> = useNavigation();
+  const navigation = useNavigation<MovieScreenNavigationProp>();
 
   const handleClick = (item: number) => () => {
     navigation.navigate('Movie', { item });
@@ -21,7 +28,7 @@ export function TrendingMoviesList({ movies }: Props) {
       <Text style={styles.text}>TrendingMovies</Text>
       <Carousel
         data={movies}
-        renderItem={({ item }) => <MovieCard item={item} handleClick={handleClick(item)}/>}
+        renderItem={({ item }) => <MovieCard movie={item} handleClick={handleClick(item.id)} />}
         firstItem={1}
         inactiveSlideOpacity={0.60}
         sliderWidth={width}

@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BackButton } from '../components/BackButton';
 import { FavouriteButton } from '../components/FavouriteButton';
-import { MoviesList } from '../components/MovieList';
+//import { MoviesList } from '../components/MovieList';
 import { PersonInfoBlock } from '../components/person/PersonInfoBlock';
 import { PersonAvatar } from '../components/person/PersonAvatar';
 import { PersonFacts } from '../components/person/PersonFacts';
@@ -13,7 +13,7 @@ import { Loading } from '../components/Loading';
 import { theme } from '../theme';
 
 export default function PersonScreen() {
-  const [movies] = useState([1, 2, 3, 4, 5]);
+  // const [movies] = useState([1, 2, 3, 4, 5]);
   const [loading] = useState(false);
 
   return (
@@ -36,7 +36,7 @@ export default function PersonScreen() {
             <PersonFacts />
 
             {/*  movies */}
-            <MoviesList title="Movies" data={movies} hideSeeAllButton />
+            //{/* <MoviesList title="Movies" data={movies} hideSeeAllButton />*/}
           </Fragment>
         )
       }
