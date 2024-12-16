@@ -38,7 +38,7 @@ export function MoviesList({ title, data, hideSeeAllButton }: Props) {
 
       <ScrollView
         horizontal
-        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
         {data.map((movie, index) => {

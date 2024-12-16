@@ -1,28 +1,28 @@
-import { View, StyleSheet, SafeAreaView, StatusBar, Text, TouchableOpacity, Animated } from 'react-native';
+import { View, StyleSheet, SafeAreaView, StatusBar, Text, Animated } from 'react-native';
 import { theme } from '../theme';
-import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { Bars3CenterLeftIcon } from 'react-native-heroicons/outline';
 import ScrollView = Animated.ScrollView;
 import { TrendingMoviesList } from '../components/TrendingMoviesList';
 import { useState } from 'react';
 import { MoviesList } from '../components/MovieList';
+import { SearchButton } from '../components/SearchButton';
 
 export default function HomeScreen() {
-  const [trendingMovies, setTrendingMovies] = useState([1, 2, 3]);
-  const [upcomingMovies, setUpcomingMovies] = useState([1, 2, 3]);
-  const [topRatedMovies, setTopRatedMovies] = useState([1, 2, 3]);
+  const [trendingMovies] = useState([1, 2, 3]);
+  const [upcomingMovies] = useState([1, 2, 3]);
+  const [topRatedMovies] = useState([1, 2, 3]);
 
   return (
     <View style={styles.wrapper}>
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content"/>
+        <StatusBar barStyle="light-content" />
         <View style={styles.header}>
-          <Bars3CenterLeftIcon size="30" strokeWidth={2} color="white"/>
+          <Bars3CenterLeftIcon size="30" strokeWidth={2} color="white" />
           <Text style={styles.logo}>
             <Text style={styles.accentLetter}>M</Text>ovies
           </Text>
-          <TouchableOpacity>
-            <MagnifyingGlassIcon size="30" strokeWidth={2} color="white"/>
-          </TouchableOpacity>
+
+          <SearchButton />
         </View>
       </SafeAreaView>
 
@@ -31,13 +31,13 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContainer}
       >
         {/* trending movies carousel*/}
-        <TrendingMoviesList movies={trendingMovies}/>
+        <TrendingMoviesList movies={trendingMovies} />
 
         {/* upcoming movies row*/}
-        <MoviesList title="Upcoming" data={upcomingMovies}/>
+        <MoviesList title="Upcoming" data={upcomingMovies} />
 
         {/* top-rated movies row*/}
-        <MoviesList title="Top Rated" data={topRatedMovies}/>
+        <MoviesList title="Top Rated" data={topRatedMovies} />
       </ScrollView>
     </View>
   );

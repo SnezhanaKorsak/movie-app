@@ -7,6 +7,7 @@ const colors = {
   textNeutral300: '#d4d4d4',
   bgNeutral900Opacity: 'rgba(23,23,23,0.8)',
   bgNeutral400: '#a3a3a3',
+  lightGray: '#d1d5dB'
 };
 
 export const theme = {
