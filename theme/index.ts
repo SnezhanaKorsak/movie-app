@@ -1,5 +1,6 @@
 const colors = {
   bgNeutral800: '#262626',
+  bgNeutral700: '#404040',
   white: '#fff',
   bgPrimary: '#eab308',
   textPrimary: '#eab308',

@@ -34,7 +34,6 @@ export function MoviesList({ title, data, hideSeeAllButton }: Props) {
             <Text style={styles.text}>See All</Text>
           </TouchableOpacity>
         )}
-
       </View>
 
       <ScrollView
@@ -72,6 +71,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     marginHorizontal: 16,
+    marginBottom: 12,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
