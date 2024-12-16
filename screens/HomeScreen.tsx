@@ -6,11 +6,13 @@ import { TrendingMoviesList } from '../components/TrendingMoviesList';
 import { useState } from 'react';
 import { MoviesList } from '../components/MovieList';
 import { SearchButton } from '../components/SearchButton';
+import { Loading } from '../components/Loading';
 
 export default function HomeScreen() {
   const [trendingMovies] = useState([1, 2, 3]);
   const [upcomingMovies] = useState([1, 2, 3]);
   const [topRatedMovies] = useState([1, 2, 3]);
+  const [loading] = useState(false);
 
   return (
     <View style={styles.wrapper}>
@@ -26,19 +28,26 @@ export default function HomeScreen() {
         </View>
       </SafeAreaView>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {/* trending movies carousel*/}
-        <TrendingMoviesList movies={trendingMovies} />
+      {loading
+        ? <Loading />
+        : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContainer}
+          >
+            {/* trending movies carousel*/}
+            <TrendingMoviesList movies={trendingMovies} />
 
-        {/* upcoming movies row*/}
-        <MoviesList title="Upcoming" data={upcomingMovies} />
+            {/* upcoming movies row*/}
+            <MoviesList title="Upcoming" data={upcomingMovies} />
 
-        {/* top-rated movies row*/}
-        <MoviesList title="Top Rated" data={topRatedMovies} />
-      </ScrollView>
+            {/* top-rated movies row*/}
+            <MoviesList title="Top Rated" data={topRatedMovies} />
+          </ScrollView>
+        )
+      }
+
+
     </View>
   );
 };
