@@ -38,3 +38,9 @@ export const fetchUpcomingMovies = () => {
 export const fetchTopRatedMovies = () => {
   return apiCall(topRatedMoviesEndpoint);
 };
+
+export const fetchMovieDetails = (movieId: number) => {
+  const movieDetailsEndpoint = `${API_URL}/movie/${movieId}`;
+
+  return apiCall(movieDetailsEndpoint);
+};

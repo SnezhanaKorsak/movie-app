@@ -19,13 +19,13 @@ type MovieScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, '
 export function TrendingMoviesList({ movies }: Props) {
   const navigation = useNavigation<MovieScreenNavigationProp>();
 
-  const handleClick = (item: number) => () => {
-    navigation.navigate('Movie', { item });
+  const handleClick = (itemId: number) => () => {
+    navigation.navigate('Movie', { itemId });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>TrendingMovies</Text>
+      <Text style={styles.text}>Популярные фильмы</Text>
       <Carousel
         data={movies}
         renderItem={({ item }) => <MovieCard movie={item} handleClick={handleClick(item.id)} />}

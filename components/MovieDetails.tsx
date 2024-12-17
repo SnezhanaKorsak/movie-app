@@ -1,10 +1,24 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { theme } from '../theme';
+import { Movie } from '../types';
 
 const { height } = Dimensions.get('window');
 
-export function MovieDetails() {
-  const movieName = 'Colombiana';
+type Props = {
+  details: Omit<Movie, 'persons' | 'similarMovies' | 'poster'>;
+}
+
+export function MovieDetails({ details }: Props) {
+  const {
+    name,
+    alternativeName,
+    enName, year,
+    movieLength,
+    genres,
+    description
+  } = details;
+
+  const movieName = enName || name || alternativeName;
 
   return (
     <View style={styles.detailsContainer}>
@@ -15,29 +29,26 @@ export function MovieDetails() {
 
       {/*  status, realise, runtime */}
       <Text style={styles.info}>
-        Released • 2011 • 108 min
+        Релиз • {year || '~'} • {movieLength} min
       </Text>
 
       {/* genres */}
       <View style={styles.genres}>
-        <Text style={styles.info}>
-          Action •
-        </Text>
+        {genres.map(({ name }, index) => {
+          const transformedName = name[0].toUpperCase() + name.substring(1);
+          const showPoint = index !== genres.length - 1;
 
-        <Text style={styles.info}>
-          Thriller •
-        </Text>
-
-        <Text style={styles.info}>
-          Crime
-        </Text>
+          return (
+            <Text style={styles.info} key={name}>
+              {transformedName} {showPoint && '•'}
+            </Text>
+          );
+        })}
       </View>
 
       {/* description */}
       <Text style={styles.description}>
-        A young woman grows up to be a stone-cold assassin after witnessing her parents' murder as a child in Bogota.
-        She works for her uncle as a hitman by day, but her personal time is spent engaging in vigilante murders that
-        she hopes will lead her to her ultimate target - the mobster responsible for her parents' death
+        {description}
       </Text>
     </View>
   );
@@ -68,6 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 16,
     columnGap: 8,
+    flexWrap: 'wrap',
   },
   description: {
     color: theme.colors.bgNeutral400,

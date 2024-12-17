@@ -17,7 +17,7 @@ export function FoundMovieList({ results }: Props) {
   const movieName = 'Ant-Man and the Wasp: Quantumania';
   const formatedMovieName = movieName.length > 15 ? movieName.slice(0, 15) + '...' : movieName;
 
-  const redirectToMovieScreen = (item: number) => () => navigation.push('Movie', { item });
+  const redirectToMovieScreen = (itemId: number) => () => navigation.push('Movie', { itemId });
 
   return (
     <ScrollView

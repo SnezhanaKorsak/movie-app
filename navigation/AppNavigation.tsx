@@ -7,7 +7,7 @@ import { SearchScreen } from '../screens/SearchScreen';
 
 export type RootStackParamList = {
   Home: undefined;
-  Movie: { item: number };
+  Movie: { itemId: number };
   Person: { personId: number };
   Search: undefined;
 };

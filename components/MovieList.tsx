@@ -4,12 +4,12 @@ import ScrollView = Animated.ScrollView;
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Movie } from '../types';
+import { Movie, SimilarMovie } from '../types';
 import { formatMovieName } from '../utils';
 
 type Props = {
   title: string;
-  data: Movie[];
+  data: Movie[] | SimilarMovie[];
   hideSeeAllButton?: boolean;
 }
 
@@ -20,8 +20,8 @@ const { width, height } = Dimensions.get('window');
 export function MoviesList({ title, data, hideSeeAllButton }: Props) {
   const navigation = useNavigation<MovieScreenNavigationProp>();
 
-  const handleClick = () => {
-    navigation.push('Movie', { item: 1 });
+  const handleClick = (itemId: number) => () => {
+    navigation.push('Movie', { itemId });
   };
 
   return (
@@ -45,7 +45,7 @@ export function MoviesList({ title, data, hideSeeAllButton }: Props) {
           const source = poster ? { uri: poster.url } : require('../assets/no_image.jpg');
 
           return (
-            <TouchableOpacity key={id} onPress={handleClick}>
+            <TouchableOpacity key={id} onPress={handleClick(id)}>
               <View style={styles.movieListContainer}>
                 <Image
                   source={source}
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   movieName: {
     color: theme.colors.textNeutral300,
     marginLeft: 4,
+    marginTop: 8,
   },
   movieListContainer: {
     marginTop: 4,

@@ -1,14 +1,21 @@
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { theme } from '../theme';
+import { PosterType } from '../types';
 
 const { width, height } = Dimensions.get('window');
 
-export function Poster() {
+type Props = {
+  poster: PosterType;
+}
+
+export function Poster({ poster }: Props) {
+  const imageSource = poster ? { uri: poster.url } : require('../assets/no_image.jpg');
+
   return (
     <View>
       <Image
-        source={require('../assets/moviePoster.jpg')}
+        source={imageSource}
         style={{
           width,
           height: height * 0.55,

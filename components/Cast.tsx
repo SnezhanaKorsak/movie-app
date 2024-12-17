@@ -1,11 +1,12 @@
-import { TouchableOpacity, Dimensions, Image, StyleSheet, View, Text, ScrollView } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, View, Text, ScrollView } from 'react-native';
 import { theme } from '../theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { useNavigation } from '@react-navigation/native';
+import { Person } from '../types';
 
 type Props = {
-  cast: number[];
+  cast: Person[];
 }
 
 type PersonScreenRouteProp = NativeStackNavigationProp<RootStackParamList, 'Person'>;
@@ -13,40 +14,45 @@ type PersonScreenRouteProp = NativeStackNavigationProp<RootStackParamList, 'Pers
 export function Cast({ cast }: Props) {
   const navigation = useNavigation<PersonScreenRouteProp>();
 
-  const actorName = 'Zoe Saldana';
-  const characterName = 'Cataleya';
+  const getActors = () => {
+    if (cast.length === 0) {
+      return [];
+    }
 
-  const redirectToPersonScreen = () => navigation.navigate('Person', { personId: 1 });
+    const actors = cast.filter(({ profession }) => profession === 'актеры');
+
+    return actors?.length >= 10 ? actors.slice(0, 10) : actors;
+  };
+  const topPersons = getActors();
+
+  const redirectToPersonScreen = (personId: number) => () => navigation.navigate('Person', { personId });
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Top Cast</Text>
+      <Text style={styles.title}>Актеры</Text>
 
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {cast && cast.map((person, index) => {
+        {topPersons.map(({ id, photo, name, enName }) => {
+          const actorName = name || enName;
+
           return (
             <TouchableOpacity
-              key={index}
+              key={id}
               style={styles.personItem}
-              onPress={redirectToPersonScreen}
+              onPress={redirectToPersonScreen(id)}
             >
               <View style={styles.personAvatarBlock}>
                 <Image
-                  source={require('../assets/actor.jpg')}
+                  source={{ uri: photo }}
                   style={styles.avatar}
                 />
               </View>
 
               <Text style={styles.personName}>
-                {
-                  characterName.length > 10 ? characterName.slice(0, 10) + '...' : characterName
-                }
-              </Text>
-              <Text style={styles.characterName}>
                 {
                   actorName.length > 10 ? actorName.slice(0, 10) + '...' : actorName
                 }
@@ -81,12 +87,6 @@ const styles = StyleSheet.create({
   },
   personName: {
     color: theme.colors.white,
-    fontSize: 12,
-    lineHeight: 16,
-    marginTop: 4,
-  },
-  characterName: {
-    color: theme.colors.bgNeutral400,
     fontSize: 12,
     lineHeight: 16,
     marginTop: 4,

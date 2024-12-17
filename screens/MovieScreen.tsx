@@ -6,7 +6,7 @@ import { RouteProp } from '@react-navigation/native';
 
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { Cast } from '../components/Cast';
-//import { MoviesList } from '../components/MovieList';
+import { MoviesList } from '../components/MovieList';
 import { BackButton } from '../components/BackButton';
 import { FavouriteButton } from '../components/FavouriteButton';
 import { MovieDetails } from '../components/MovieDetails';
@@ -14,21 +14,42 @@ import { Poster } from '../components/Poster';
 
 import { theme } from '../theme';
 import { Loading } from '../components/Loading';
+import { Movie } from '../types';
+import { fetchMovieDetails } from '../api/movies';
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
 export default function MovieScreen() {
   const route = useRoute<MovieScreenRouteProp>();
 
-  const [cast] = useState([1, 2, 3, 4, 5]);
-  // const [similarMovies] = useState([1, 2, 3, 4, 5]);
-  const [loading] = useState(false);
+  const [movieDetails, setMovieDetails] = useState<Movie | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const { item } = route.params;
+  const { itemId } = route.params;
 
   useEffect(() => {
-    //call the movie details api
-  }, [item]);
+    getMoviesDetails();
+  }, [itemId]);
+
+  const getMoviesDetails = async () => {
+    const data: Movie = await fetchMovieDetails(itemId);
+
+    if (data) {
+      setMovieDetails(data);
+      setLoading(false);
+    }
+  };
+
+  if (!movieDetails) {
+    return null;
+  }
+
+  const {
+    persons,
+    similarMovies,
+    poster,
+    ...details
+  } = movieDetails;
 
   return (
     <ScrollView
@@ -42,20 +63,21 @@ export default function MovieScreen() {
           <FavouriteButton />
         </SafeAreaView>
 
-        {loading ? <Loading /> : <Poster />}
+        {loading ? <Loading /> : <Poster poster={poster} />}
 
       </View>
 
       {!loading && (
         <Fragment>
           {/*  movie details */}
-          <MovieDetails />
+          <MovieDetails details={details} />
 
           {/* cast */}
-          <Cast cast={cast} />
+          <Cast cast={persons} />
 
           {/*similar movies */}
-          {/* <MoviesList title="Similar Movies" data={similarMovies} hideSeeAllButton />*/}
+          {similarMovies?.length > 0 && <MoviesList title="Похожие фильмы" data={similarMovies} hideSeeAllButton />}
+
         </Fragment>
       )}
     </ScrollView>
