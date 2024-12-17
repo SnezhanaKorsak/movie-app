@@ -44,3 +44,9 @@ export const fetchMovieDetails = (movieId: number) => {
 
   return apiCall(movieDetailsEndpoint);
 };
+
+export const fetchPersonDetails = (personId: number) => {
+  const personDetailsEndpoint = `${API_URL}/person/${personId}`;
+
+  return apiCall(personDetailsEndpoint);
+};

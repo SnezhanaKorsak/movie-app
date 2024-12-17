@@ -3,21 +3,29 @@ import { theme } from '../../theme';
 
 const { width, height } = Dimensions.get('window');
 
-export function PersonAvatar() {
+type Props = {
+  name: string,
+  photo: string;
+  birthPlace: Array<{value: string}>;
+}
+
+export function PersonAvatar({ name, photo, birthPlace }: Props) {
+  const formatedBirthPlace = birthPlace.map(({ value}) => value).join(', ');
+
   return (
     <View>
       <View style={styles.details}>
         <View style={styles.imageMask}>
           <Image
-            source={require('../../assets/actor.jpg')}
+            source={{ uri: photo }}
             style={styles.avatar}
           />
         </View>
       </View>
 
       <View style={styles.description}>
-        <Text style={styles.mainText}>Zoe Saldana</Text>
-        <Text style={styles.subText}>London, United Kingdom</Text>
+        <Text style={styles.mainText}>{name}</Text>
+        <Text style={styles.subText}>{formatedBirthPlace}</Text>
       </View>
     </View>
   );
@@ -30,9 +38,9 @@ const styles = StyleSheet.create({
   },
   imageMask: {
     overflow: 'hidden',
-    borderRadius: '50%',
-    width: 270,
-    height: 270,
+    borderRadius: '15%',
+    width: 300,
+    height: 300,
     alignItems: 'center',
     borderWidth: 2,
     borderStyle: 'solid',

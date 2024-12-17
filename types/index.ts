@@ -12,7 +12,7 @@ export type Movie = {
   description: string,
   poster: PosterType,
   genres: Array<{name: string}>,
-  persons: Person[];
+  persons: PersonDetails[];
   rating: {
     imdb: number
   },
@@ -20,13 +20,20 @@ export type Movie = {
   similarMovies: SimilarMovie[];
 }
 
-export type Person = {
+export type PersonDetails = {
   id: number,
   photo: string,
   name: string,
   enName: string,
   description: string,
   profession: string;
+  movies: SimilarMovie[];
+  sex: string;
+  birthday: string;
+  birthPlace: Array<{value: string}>;
+  age: number,
+  countAwards: number;
+  facts: Array<{value: string}>;
 }
 
 export type SimilarMovie = {

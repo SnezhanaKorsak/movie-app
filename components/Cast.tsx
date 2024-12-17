@@ -3,10 +3,10 @@ import { theme } from '../theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { useNavigation } from '@react-navigation/native';
-import { Person } from '../types';
+import { PersonDetails } from '../types';
 
 type Props = {
-  cast: Person[];
+  cast: PersonDetails[];
 }
 
 type PersonScreenRouteProp = NativeStackNavigationProp<RootStackParamList, 'Person'>;

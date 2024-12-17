@@ -1,20 +1,59 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParamList } from '../navigation/AppNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BackButton } from '../components/BackButton';
 import { FavouriteButton } from '../components/FavouriteButton';
-//import { MoviesList } from '../components/MovieList';
+import { MoviesList } from '../components/MovieList';
 import { PersonInfoBlock } from '../components/person/PersonInfoBlock';
 import { PersonAvatar } from '../components/person/PersonAvatar';
 import { PersonFacts } from '../components/person/PersonFacts';
 import { Loading } from '../components/Loading';
 
 import { theme } from '../theme';
+import { PersonDetails } from '../types';
+import { fetchPersonDetails } from '../api/movies';
+
+type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Person'>;
 
 export default function PersonScreen() {
-  // const [movies] = useState([1, 2, 3, 4, 5]);
-  const [loading] = useState(false);
+  const route = useRoute<MovieScreenRouteProp>();
+
+  const [personDetails, setPersonDetails] = useState<PersonDetails | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const { personId } = route.params;
+
+  useEffect(() => {
+    getPersonDetails();
+  }, [personId]);
+
+  const getPersonDetails = async () => {
+    const data: PersonDetails = await fetchPersonDetails(personId);
+
+    if (data) {
+      setPersonDetails(data);
+      setLoading(false);
+    }
+  };
+
+  if (!personDetails) {
+    return null;
+  }
+
+  const {
+    photo,
+    movies,
+    sex,
+    birthday,
+    age,
+    countAwards,
+    birthPlace,
+    name,
+    facts,
+  } = personDetails;
 
   return (
     <ScrollView style={styles.wrapper} contentContainerStyle={styles.content}>
@@ -29,14 +68,14 @@ export default function PersonScreen() {
         : (
           <Fragment>
             {/*  person details */}
-            <PersonAvatar />
+            <PersonAvatar photo={photo} name={name} birthPlace={birthPlace} />
 
-            <PersonInfoBlock />
+            <PersonInfoBlock sex={sex} birthday={birthday} age={age} countAwards={countAwards} />
 
-            <PersonFacts />
+            <PersonFacts facts={facts} />
 
             {/*  movies */}
-            //{/* <MoviesList title="Movies" data={movies} hideSeeAllButton />*/}
+            <MoviesList title="Фильмы" data={movies} hideSeeAllButton />
           </Fragment>
         )
       }

@@ -1,24 +1,34 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '../../theme';
+import { dateFormat } from '../../utils';
 
-export function PersonInfoBlock() {
+type Props = {
+  sex: string;
+  birthday: string;
+  age: number;
+  countAwards: number;
+}
+
+export function PersonInfoBlock({ sex, birthday, age, countAwards }: Props) {
+  const birthdayFormatted = dateFormat(new Date(birthday));
+
   return (
     <View style={styles.infoContainer}>
       <View style={styles.infoBlock}>
-        <Text style={styles.infoMainText}>Gender</Text>
-        <Text style={styles.infoSubText}>Mail</Text>
+        <Text style={styles.infoMainText}>Пол</Text>
+        <Text style={styles.infoSubText}>{sex}</Text>
       </View>
       <View style={styles.infoBlock}>
-        <Text style={styles.infoMainText}>Birthday</Text>
-        <Text style={styles.infoSubText}>1978-06-19</Text>
+        <Text style={styles.infoMainText}>День рождения</Text>
+        <Text style={styles.infoSubText}>{birthdayFormatted}</Text>
       </View>
       <View style={styles.infoBlock}>
-        <Text style={[styles.infoMainText]}>Age</Text>
-        <Text style={styles.infoSubText}>46</Text>
+        <Text style={[styles.infoMainText]}>Возраст</Text>
+        <Text style={styles.infoSubText}>{age}</Text>
       </View>
       <View style={[styles.infoBlock, { borderRightWidth: 0 }]}>
-        <Text style={[styles.infoMainText]}>Awards</Text>
-        <Text style={styles.infoSubText}>10</Text>
+        <Text style={[styles.infoMainText]}>Наград</Text>
+        <Text style={styles.infoSubText}>{countAwards}</Text>
       </View>
     </View>
   );

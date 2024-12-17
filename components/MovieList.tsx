@@ -40,12 +40,12 @@ export function MoviesList({ title, data, hideSeeAllButton }: Props) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-        {data.map(({ id, enName, name, alternativeName, poster }) => {
+        {data.map(({ id, enName, name, alternativeName, poster }, index) => {
           const movieName = enName || name || alternativeName;
           const source = poster ? { uri: poster.url } : require('../assets/no_image.jpg');
 
           return (
-            <TouchableOpacity key={id} onPress={handleClick(id)}>
+            <TouchableOpacity key={id + index} onPress={handleClick(id)}>
               <View style={styles.movieListContainer}>
                 <Image
                   source={source}
