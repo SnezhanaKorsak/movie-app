@@ -34,7 +34,7 @@ export function MovieDetails({ details }: Props) {
 
       {/* genres */}
       <View style={styles.genres}>
-        {genres.map(({ name }, index) => {
+        {genres && genres.map(({ name }, index) => {
           const transformedName = name[0].toUpperCase() + name.substring(1);
           const showPoint = index !== genres.length - 1;
 

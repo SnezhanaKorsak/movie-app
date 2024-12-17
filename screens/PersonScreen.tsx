@@ -55,6 +55,8 @@ export default function PersonScreen() {
     facts,
   } = personDetails;
 
+  const filteredMovies = movies.filter(({ rating }) => rating);
+
   return (
     <ScrollView style={styles.wrapper} contentContainerStyle={styles.content}>
       {/*  back button */}
@@ -75,7 +77,7 @@ export default function PersonScreen() {
             <PersonFacts facts={facts} />
 
             {/*  movies */}
-            <MoviesList title="Фильмы" data={movies} hideSeeAllButton />
+            <MoviesList title="Фильмы" data={filteredMovies} hideSeeAllButton />
           </Fragment>
         )
       }

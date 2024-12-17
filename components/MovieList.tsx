@@ -6,6 +6,7 @@ import { RootStackParamList } from '../navigation/AppNavigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Movie, SimilarMovie } from '../types';
 import { formatMovieName } from '../utils';
+import { MovieCardWithoutImage } from './MovieCardWithoutImage';
 
 type Props = {
   title: string;
@@ -41,22 +42,29 @@ export function MoviesList({ title, data, hideSeeAllButton }: Props) {
         contentContainerStyle={styles.scrollContainer}
       >
         {data.map(({ id, enName, name, alternativeName, poster }, index) => {
-          const movieName = enName || name || alternativeName;
+          const movieName = name || enName || alternativeName;
           const source = poster ? { uri: poster.url } : require('../assets/no_image.jpg');
+          const formatedMovieName = formatMovieName(movieName, 14);
 
           return (
-            <TouchableOpacity key={id + index} onPress={handleClick(id)}>
+            <TouchableOpacity key={id.toString() + index} onPress={handleClick(id)}>
               <View style={styles.movieListContainer}>
-                <Image
-                  source={source}
-                  style={{
-                    width: width * 0.33,
-                    height: height * 0.22,
-                    borderRadius: 25,
-                  }}
-                />
+                {poster ? (
+                  <View>
+                    <Image
+                      source={source}
+                      style={{
+                        width: width * 0.33,
+                        height: height * 0.22,
+                        borderRadius: 25,
+                      }}
+                    />
 
-                {movieName && <Text style={styles.movieName}>{formatMovieName(movieName, 14)}</Text>}
+                    {movieName && <Text style={styles.movieName}>{formatedMovieName}</Text>}
+                  </View>
+                ) : (
+                  <MovieCardWithoutImage movieName={formatedMovieName} />
+                )}
               </View>
             </TouchableOpacity>
           );
