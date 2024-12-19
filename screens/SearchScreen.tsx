@@ -1,22 +1,45 @@
-import { Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, Keyboard, StyleSheet, View } from 'react-native';
 
 import { FoundMovieList } from '../components/FoundMovieList';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Search } from '../components/SearchLayout';
 import { Loading } from '../components/Loading';
 
 import { theme } from '../theme';
+import { Movie } from '../types';
+import { fetchMovieByName } from '../api/movies';
+import debounce from 'lodash/debounce';
 
 const { width, height } = Dimensions.get('window');
 
 export function SearchScreen() {
-  const [results] = useState([1, 2, 3, 4]);
-  const [loading] = useState(false);
+  const [results, setResults] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = (value: string) => {
+    if (value && value.length > 2) {
+
+      setLoading(true);
+
+      fetchMovieByName(value)
+        .then(data => {
+          setResults(data.docs);
+          Keyboard.dismiss();
+        })
+        .catch(() => setResults([]))
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+      setResults([]);
+    }
+  };
+
+  const handleTextDebounce = useCallback(debounce(handleSearch, 800), []);
 
   if (loading) {
     return (
       <View style={styles.wrapper}>
-        <Search />
+        <Search handleSearch={handleTextDebounce} />
         <Loading />
       </View>
     );
@@ -24,7 +47,7 @@ export function SearchScreen() {
 
   return (
     <View style={styles.wrapper}>
-      <Search />
+      <Search handleSearch={handleTextDebounce} />
 
       {/* results*/}
       {results.length > 0

@@ -3,19 +3,17 @@ import { theme } from '../theme';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigation';
 import { useNavigation } from '@react-navigation/native';
+import { Movie } from '../types';
 
 type MovieScreenRouteProp = NativeStackNavigationProp<RootStackParamList, 'Movie'>;
 
 type Props = {
-  results: number[];
+  results: Movie[];
 }
 const { width, height } = Dimensions.get('window');
 
 export function FoundMovieList({ results }: Props) {
   const navigation = useNavigation<MovieScreenRouteProp>();
-
-  const movieName = 'Ant-Man and the Wasp: Quantumania';
-  const formatedMovieName = movieName.length > 15 ? movieName.slice(0, 15) + '...' : movieName;
 
   const redirectToMovieScreen = (itemId: number) => () => navigation.push('Movie', { itemId });
 
@@ -28,16 +26,20 @@ export function FoundMovieList({ results }: Props) {
       <Text style={styles.title}>Results ({results.length})</Text>
 
       <View style={styles.resultsBlock}>
-        {results.map((item, index) => {
+        {results.map(({ id, poster, name, enName, alternativeName }) => {
+          const movieName = name || enName || alternativeName;
+          const source = poster.url ? { uri: poster.url } : require('../assets/no_image.jpg');
+          const formatedMovieName = movieName.length > 15 ? movieName.slice(0, 15) + '...' : movieName;
+
           return (
             <TouchableWithoutFeedback
-              key={index}
-              onPress={redirectToMovieScreen(item)}
+              key={id}
+              onPress={redirectToMovieScreen(id)}
             >
               <View style={styles.imageWrapper}>
                 <Image
                   style={styles.image}
-                  source={require('../assets/moviePoster2.jpg')}
+                  source={source}
                 />
                 <Text style={styles.name}>{formatedMovieName}</Text>
               </View>

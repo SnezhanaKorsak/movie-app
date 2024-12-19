@@ -7,7 +7,11 @@ import { useNavigation } from '@react-navigation/native';
 
 type HomeScreenRouteProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
-export function Search() {
+type Props = {
+  handleSearch: (value: string) => void;
+}
+
+export function Search({ handleSearch }: Props) {
   const navigation = useNavigation<HomeScreenRouteProp>();
 
   const redirectToHomeScreen = () => navigation.navigate('Home');
@@ -15,8 +19,9 @@ export function Search() {
   return (
     <View style={styles.content}>
       <TextInput
-        placeholder="Search movie"
+        placeholder="Введите текст"
         placeholderTextColor={theme.colors.lightGray}
+        onChangeText={handleSearch}
         style={styles.input}
       />
 
