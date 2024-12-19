@@ -31,10 +31,13 @@ export default function PersonScreen() {
   }, [personId]);
 
   const getPersonDetails = async () => {
+    setLoading(true);
+
     const data: PersonDetails = await fetchPersonDetails(personId);
 
-    if (data) {
+    try {
       setPersonDetails(data);
+    } finally {
       setLoading(false);
     }
   };

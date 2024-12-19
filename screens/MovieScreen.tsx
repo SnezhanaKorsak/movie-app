@@ -32,10 +32,13 @@ export default function MovieScreen() {
   }, [itemId]);
 
   const getMoviesDetails = async () => {
+    setLoading(true);
+
     const data: Movie = await fetchMovieDetails(itemId);
 
-    if (data) {
+    try {
       setMovieDetails(data);
+    } finally {
       setLoading(false);
     }
   };

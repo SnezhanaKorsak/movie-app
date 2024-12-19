@@ -24,34 +24,47 @@ export default function HomeScreen() {
   }, []);
 
   const getTrendingMovies = async () => {
+    setLoading(true);
+
     const data: GetMovieResponse = await fetchTrendingMovies();
 
-    if (data) {
+    try {
       const sortedList = sortedByRating(data.docs);
-
       setTrendingMovies(sortedList);
+
+    } finally {
       setLoading(false);
     }
   };
 
   const getUpcomingMovies = async () => {
+    setLoading(true);
+
     const data: GetMovieResponse = await fetchUpcomingMovies();
 
-    if (data) {
+    try {
       const moviesWithPoster = data.docs.filter(item => item.poster);
 
       setUpcomingMovies(moviesWithPoster);
+    } catch (err) {
+      setUpcomingMovies([]);
+    } finally {
       setLoading(false);
     }
   };
 
   const getTopRatedMovies = async () => {
+    setLoading(true);
+
     const data: GetMovieResponse = await fetchTopRatedMovies();
 
-    if (data) {
+    try {
       const sortedList = sortedByRating(data.docs);
 
       setTopRatedMovies(sortedList);
+    } catch (err) {
+      setTopRatedMovies([]);
+    } finally {
       setLoading(false);
     }
   };
@@ -85,7 +98,7 @@ export default function HomeScreen() {
 
 
             {/* top-rated movies row*/}
-            <MoviesList title="С высоким рейтингом" data={topRatedMovies} />
+            {topRatedMovies.length > 0 && <MoviesList title="С высоким рейтингом" data={topRatedMovies} />}
           </ScrollView>
         )
       }
